@@ -14,7 +14,6 @@ func CalculateOrder(prices []int64, quantities []int, discount int) (subtotal, d
 			return 0, 0, 0
 		}
 	}
-	subtotal = 0
 	for i, price := range prices {
 		quantity := quantities[i]
 		subtotal += price * int64(quantity)
