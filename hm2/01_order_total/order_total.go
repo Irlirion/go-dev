@@ -9,6 +9,18 @@ func CalculateOrder(prices []int64, quantities []int, discount int) (subtotal, d
 	if (len(prices) != len(quantities)) || (discount < 0) || (discount > 100) {
 		return 0, 0, 0
 	}
+	for i := 0; i < len(prices); i++ {
+		if (prices[i] < 0) || (quantities[i] < 0) {
+			return 0, 0, 0
+		}
+	}
+	subtotal = 0
+	for i, price := range prices {
+		quantity := quantities[i]
+		subtotal += price * int64(quantity)
+	}
+	discountAmount = subtotal * int64(discount) / 100
+	total = subtotal - discountAmount
 
-	return 0, 0, 0
+	return subtotal, discountAmount, total
 }
