@@ -1,0 +1,6 @@
+# Go test output
+*.test
+*.out
+
+# macOS metadata
+.DS_Store
