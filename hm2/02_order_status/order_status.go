@@ -9,19 +9,19 @@ func CountStatuses(statuses []string) (newCount, paidCount, shippedCount, cancel
 	}
 	for _, status := range statuses {
 		switch status {
-			case "new":
-				newCount++
-				activeCount++
-			case "paid":
-				paidCount++
-				activeCount++
-			case "shipped":
-				shippedCount++
-				activeCount++
-			case "cancelled":
-				cancelledCount++
-			default:
-				unknownCount++
+		case "new":
+			newCount++
+			activeCount++
+		case "paid":
+			paidCount++
+			activeCount++
+		case "shipped":
+			shippedCount++
+			activeCount++
+		case "cancelled":
+			cancelledCount++
+		default:
+			unknownCount++
 		}
 	}
 	return newCount, paidCount, shippedCount, cancelledCount, unknownCount, activeCount
