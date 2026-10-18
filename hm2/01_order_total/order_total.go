@@ -9,5 +9,6 @@ func CalculateOrder(prices []int64, quantities []int, discount int) (subtotal, d
 	if (len(prices) != len(quantities)) || (discount < 0) || (discount > 100) {
 		return 0, 0, 0
 	}
+
 	return 0, 0, 0
 }
