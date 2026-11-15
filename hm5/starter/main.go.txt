@@ -1,0 +1,103 @@
+package main
+
+import (
+	"errors"
+	"fmt"
+)
+
+var ErrEmptyMessage = errors.New("пустое сообщение")
+
+type Notifier interface {
+	Send(msg string) error
+}
+
+type BaseNotifier struct {
+	Channel string
+}
+
+func (b BaseNotifier) Log() {
+	fmt.Println("Sending notification via channel:", b.Channel)
+}
+
+type EmailNotifier struct {
+	BaseNotifier
+	Address string
+}
+
+func (e EmailNotifier) Send(msg string) error {
+	// TODO: верните ErrEmptyMessage для пустого msg; иначе выведите канал, адрес и сообщение.
+	return nil
+}
+
+var _ Notifier = EmailNotifier{}
+
+type PushNotifier struct {
+	BaseNotifier BaseNotifier
+	DeviceID     uint64
+}
+
+func (p PushNotifier) Send(msg string) error {
+	// TODO: сначала проверьте msg, затем DeviceID; иначе выведите канал, устройство и сообщение.
+	return nil
+}
+
+var _ Notifier = PushNotifier{}
+
+type SendError struct {
+	Channel string
+	Reason  string
+}
+
+func (e *SendError) Error() string {
+	// TODO: верните описание с Channel и Reason.
+	return ""
+}
+
+var _ error = (*SendError)(nil)
+
+type BrokenNotifier struct{}
+
+func (BrokenNotifier) Send(string) error {
+	panic("драйвер канала повреждён")
+}
+
+type Channel struct {
+	Name   string
+	Sender Notifier
+}
+
+func SafeSend(notifier Notifier, msg string) (err error) {
+	// TODO: до вызова Send зарегистрируйте defer с recover и заполните err при панике.
+	return notifier.Send(msg)
+}
+
+func Dispatch(all []Channel, msg string) []error {
+	// TODO: вызовите каждый Sender через SafeSend, оберните ошибки через %w и соберите их.
+	return nil
+}
+
+func main() {
+	email := EmailNotifier{
+		BaseNotifier: BaseNotifier{Channel: "email"},
+		Address:      "example@mail.ru",
+	}
+	push := PushNotifier{
+		BaseNotifier: BaseNotifier{Channel: "push"},
+		DeviceID:     123456,
+	}
+
+	channels := []Channel{
+		{Name: "email", Sender: email},
+		{Name: "broken", Sender: BrokenNotifier{}},
+		{Name: "push", Sender: push},
+	}
+
+	failures := Dispatch(channels, "Заказ готов")
+	for _, err := range failures {
+		fmt.Println("ошибка:", err)
+		// TODO: добавьте errors.Is для ErrEmptyMessage и errors.As (можете использовать errors.AsType) для *SendError.
+	}
+	fmt.Println("Всего ошибок:", len(failures))
+
+	// TODO: отдельными запусками проверьте пустое сообщение и push с DeviceID == 0.
+}
